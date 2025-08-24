@@ -11,9 +11,9 @@ import (
 
 	"github.com/kirillApanasiuk/kit/pkg/discovery"
 	"github.com/kirillApanasiuk/kit/pkg/discovery/counsul"
+	"github.com/kirillApanasiuk/movie-rating/infrastructure/persistence/reporitory"
 	http2 "github.com/kirillApanasiuk/movie-rating/internal/controller/http"
-	"github.com/kirillApanasiuk/movie-rating/internal/reporitory"
-	"github.com/kirillApanasiuk/movie-rating/internal/service"
+	"github.com/kirillApanasiuk/movie-rating/usecase/rating"
 )
 
 const (
@@ -32,7 +32,7 @@ type app struct {
 
 func New() *app {
 	repo := reporitory.NewRepository()
-	ctrl := service.New(repo)
+	ctrl := rating.New(repo)
 	h := http2.New(ctrl)
 
 	mux := http.NewServeMux()

@@ -3,9 +3,9 @@ package grpc
 import (
 	"context"
 
+	"github.com/kirillApanasiuk/movie-rating/domain/entity"
 	"github.com/kirillApanasiuk/movie-rating/gen"
-	"github.com/kirillApanasiuk/movie-rating/internal/service"
-	"github.com/kirillApanasiuk/movie-rating/model"
+	"github.com/kirillApanasiuk/movie-rating/usecase/rating"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -16,10 +16,10 @@ const (
 
 type GrpcController struct {
 	gen.UnimplementedRatingServiceServer
-	svc *service.Service
+	svc *rating.Service
 }
 
-func New(svc *service.Service) *GrpcController {
+func New(svc *rating.Service) *GrpcController {
 	return &GrpcController{
 		svc: svc,
 	}
@@ -30,9 +30,9 @@ func (h *GrpcController) GetAggregatedRating(ctx context.Context, req *gen.GetAg
 		return nil, status.Errorf(codes.InvalidArgument, "nil")
 	}
 
-	rsp, err := h.svc.GetAggregatedRating(ctx, &service.GetAggregatedRatingReq{
-		RecordType: model.RecordType(req.RecordType),
-		RecordID:   model.RecordID(req.RecordId),
+	rsp, err := h.svc.GetAggregatedRating(ctx, &rating.GetAggregatedRatingReq{
+		RecordType: entity.RecordType(req.RecordType),
+		RecordID:   entity.RecordID(req.RecordId),
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
