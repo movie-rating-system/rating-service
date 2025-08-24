@@ -6,18 +6,12 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 )
 
 func main() {
 	app := New()
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
-
-	go func() {
-		time.Sleep(2 * time.Second)
-		cancel()
-	}()
 
 	if err := app.Run(ctx); err != nil {
 		log.Printf("App.Run error %v", err)
